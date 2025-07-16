@@ -1,0 +1,9 @@
+input.form-control,
+select.form-select {
+  min-height: 48px;
+}
+
+button.btn {
+  font-weight: 600;
+  font-size: 16px;
+}

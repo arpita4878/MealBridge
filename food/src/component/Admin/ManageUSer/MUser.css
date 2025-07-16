@@ -1,0 +1,22 @@
+.admin-container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.admin-header .admin-welcome {
+  font-weight: 700;
+  border-radius: 50rem;
+  padding: 0.5rem 2rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.admin-title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.admin-subtitle {
+  color: #6c757d; /* Bootstrap muted */
+  font-size: 1.25rem;
+}
