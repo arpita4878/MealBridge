@@ -120,12 +120,20 @@ function Nav() {
                                                     <Link to='/changepassword'>    <a class="dropdown-item">Change Password</a></Link>
                                                 </div>
                                             </div>
+                                               <div class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Tracking</a>
+                                                <div class="dropdown-menu bg-light">
                                             <Link to='/impactracking'> <a class="nav-item nav-link ">Impact tracking</a></Link>
+                                                    <Link to='/get-involved'>    <a class="dropdown-item">GetInvolve </a></Link>
+                                            <Link to='/partners'> <a class="nav-item nav-link ">BecomePartner</a></Link>
+                                            <Link to='/volunteer'> <a class="nav-item nav-link ">Volunteer</a></Link>                                               
+                                                </div>
+                                            </div>
                                             <Link to='/dashboard'> <a class="nav-item nav-link ">Badges</a></Link>
 
                                         </div>
                                         <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search"></i></button>
-                                        <Link to='/logout'>   <a class="btn btn-primary py-2 px-4 d-none d-xl-inline-block rounded-pill">Log Out</a></Link>
+                                        <Link to='/logout'>   <a class="btn btn-primary py-2 px-4 rounded-pill">Log Out</a></Link>
                                     </div>
                                 </nav>
                             </div>
