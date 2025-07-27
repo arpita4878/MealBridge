@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Volunteer.css';
-import swal from 'sweetalert2'
+import swal from 'sweetalert2';
 
 function Volunteer() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -15,26 +15,30 @@ function Volunteer() {
     e.preventDefault();
 
     try {
+      const form = new FormData();
+      form.append('name', formData.name);
+      form.append('email', formData.email);
+      form.append('message', formData.message);
+
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbwm-IAVZsbn5gSz5yaMiRV6uhdlLPchDbqcCe0YkS2DStJnP8UYZQQYP6YtS5-uxRHajQ/exec',
+        'https://script.google.com/macros/s/AKfycby9oXcVOWqWoZ3CLa2-PuCXXdHwE0o7lmb7guhYlqX69SBTEraRAu8lZFz0tLYtZyj0ig/exec',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+          mode: 'cors',
+          body: form
         }
       );
 
       if (response.ok) {
         setSubmitted(true);
-        setFormData({ name: '', email: '', message: '' }); // Reset form
+        setFormData({ name: '', email: '', message: '' });
+        swal.fire('🎉 Thank you!', 'Your form was submitted successfully.', 'success');
       } else {
-        swal.fire('Submission failed. Please try again later.');
+        swal.fire('Submission failed', 'Please try again later.', 'error');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      swal.fire('There was an error submitting the form. Please try again.');
+      swal.fire('Error', 'There was an error submitting the form.', 'error');
     }
   };
 
