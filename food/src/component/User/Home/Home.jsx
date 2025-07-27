@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import {Link} from 'react-router-dom'
+
 
 function UserHome() {
   const [name, setName] = useState();
@@ -49,8 +51,8 @@ function UserHome() {
           </div>
 
           <div className="d-flex flex-wrap gap-3">
-            <a className="btn btn-success py-3 px-5 rounded-pill" href="/donate">Donate Food</a>
-            <a className="btn btn-outline-primary py-3 px-5 rounded-pill" href="/findfood">Find Food</a>
+            <button className="btn btn-success py-3 px-5 rounded-pill"><Link to='/donate'>  Donate Food</Link></button>
+            <button className="btn btn-outline-primary py-3 px-5 rounded-pill" ><Link to='/findfood'> Find Food</Link></button>
           </div>
         </div>
       </div>
