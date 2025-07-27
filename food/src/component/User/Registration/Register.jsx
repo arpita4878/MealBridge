@@ -7,8 +7,15 @@ import Swal from 'sweetalert2';
 
 function Register() {
   const [form, setForm] = useState({
-    name: '', email: '', mobile: '', city: '', address: '', gender: '', password: ''
+    name: '',
+    email: '',
+    mobile: '',
+    city: '',
+    address: '',
+    gender: '',
+    password: ''
   });
+
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -25,6 +32,7 @@ function Register() {
     if (!form.gender) newError.gender = 'Gender is required.';
     if (!form.password) newError.password = 'Password is required.';
     else if (form.password.length < 6) newError.password = 'Password must be at least 6 characters.';
+
     setError(newError);
     return Object.keys(newError).length === 0;
   };
@@ -39,11 +47,29 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await axios.post(__userapiurl + 'register', form);
+      // Check if email already exists
+      const checkRes = await axios.get(`${__userapiurl}check-email?email=${form.email}`);
+      if (checkRes.data.exists) {
+        setLoading(false);
+        Swal.fire({
+          icon: 'warning',
+          title: 'Already Registered',
+          text: 'This email is already in use. Please login instead.',
+        });
+        return;
+      }
 
-      setLoading(false);
+      // Submit registration data
+      await axios.post(`${__userapiurl}register`, form);
+
       setForm({
-        name: '', email: '', mobile: '', city: '', address: '', gender: '', password: ''
+        name: '',
+        email: '',
+        mobile: '',
+        city: '',
+        address: '',
+        gender: '',
+        password: ''
       });
 
       Swal.fire({
@@ -52,7 +78,7 @@ function Register() {
         text: '🎉 Welcome to MealBridge!',
         showConfirmButton: false,
         timer: 2000,
-        timerProgressBar: true
+        timerProgressBar: true,
       });
 
       setTimeout(() => {
@@ -60,23 +86,14 @@ function Register() {
       }, 2000);
 
     } catch (err) {
-      setLoading(false);
-
-      if (err.response?.data?.message === 'User already registered') {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Already Registered',
-          text: 'This email is already in use. Please login instead.',
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Registration Failed',
-          text: 'Something went wrong. Please try again.',
-        });
-      }
-
       console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration Failed',
+        text: 'Something went wrong. Please try again later.',
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
