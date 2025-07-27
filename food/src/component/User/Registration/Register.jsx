@@ -59,7 +59,7 @@ function Register() {
         return;
       }
 
-      // Submit registration data
+      // Register user
       await axios.post(`${__userapiurl}register`, form);
 
       setForm({
@@ -98,7 +98,7 @@ function Register() {
   };
 
   return (
-    <div className="container-fluid contact py-6 wow bounceInUp" data-wow-delay="0.1s">
+    <div className="container-fluid contact py-6 wow fadeInUp" data-wow-delay="0.1s">
       <div className="container">
         <div className="bg-light shadow p-5 rounded-4 border border-primary-subtle">
           <div className="text-center mb-5">
@@ -117,7 +117,7 @@ function Register() {
                 value={form.name}
                 onChange={handleChange}
               />
-              {error.name && <small className="text-danger fw-semibold">{error.name}</small>}
+              {error.name && <small className="text-danger">{error.name}</small>}
             </div>
 
             {/* Email */}
@@ -130,7 +130,7 @@ function Register() {
                 value={form.email}
                 onChange={handleChange}
               />
-              {error.email && <small className="text-danger fw-semibold">{error.email}</small>}
+              {error.email && <small className="text-danger">{error.email}</small>}
             </div>
 
             {/* Mobile */}
@@ -143,7 +143,7 @@ function Register() {
                 value={form.mobile}
                 onChange={handleChange}
               />
-              {error.mobile && <small className="text-danger fw-semibold">{error.mobile}</small>}
+              {error.mobile && <small className="text-danger">{error.mobile}</small>}
             </div>
 
             {/* Password */}
@@ -156,7 +156,7 @@ function Register() {
                 value={form.password}
                 onChange={handleChange}
               />
-              {error.password && <small className="text-danger fw-semibold">{error.password}</small>}
+              {error.password && <small className="text-danger">{error.password}</small>}
             </div>
 
             {/* City */}
@@ -173,7 +173,7 @@ function Register() {
                 <option value="Khandwa">Khandwa</option>
                 <option value="Ujjain">Ujjain</option>
               </select>
-              {error.city && <small className="text-danger fw-semibold">{error.city}</small>}
+              {error.city && <small className="text-danger">{error.city}</small>}
             </div>
 
             {/* Address */}
@@ -186,7 +186,7 @@ function Register() {
                 value={form.address}
                 onChange={handleChange}
               />
-              {error.address && <small className="text-danger fw-semibold">{error.address}</small>}
+              {error.address && <small className="text-danger">{error.address}</small>}
             </div>
 
             {/* Gender */}
@@ -201,7 +201,7 @@ function Register() {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
-              {error.gender && <small className="text-danger fw-semibold">{error.gender}</small>}
+              {error.gender && <small className="text-danger">{error.gender}</small>}
             </div>
 
             {/* Submit Button */}
@@ -219,7 +219,7 @@ function Register() {
                     aria-hidden="true"
                   ></span>
                 )}
-                {loading ? 'Submitting...' : 'Register'}
+                {loading ? 'Registering...' : 'Register'}
               </button>
 
               <p className="mt-4 text-muted">
