@@ -16,10 +16,11 @@ app.use(bodyparser.urlencoded({extended:true}))
 //configuration to solve cross-origin problem
 app.use(cors({
   origin: 'https://meal-bridge-vert.vercel.app',
-  Credential:true,
-  methods:["GET","POST","PUT","DELETE","PATCH"],
-  allowedHeaders:["content-type","Authorization"]
+  credentials: true, // 
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["content-type", "Authorization"]
 }));
+
 
 //to  link router use router level middleware
 app.use("/user",UserRouter)
