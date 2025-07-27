@@ -1,30 +1,40 @@
 import "../model/connection.js"
-import url from  'url'
-import jwt from 'jsonwebtoken'
-import rs from 'randomstring'
+import url from 'url';
+import jwt from 'jsonwebtoken';
+import rs from 'randomstring';
+import UserSchemaModel from "../model/user.model.js";
+import emailVerification from "./email.controller.js";
 
-import UserSchemaModel from "../model/user.model.js"
-import emailVerification from "./email.controller.js"
+export const register = async (req, res) => {
+  try {
+    const existingUser = await UserSchemaModel.findOne({ email: req.body.email });
 
+    if (existingUser) {
+      return res.status(409).json({ status: false, message: "User already registered" });
+    }
 
-export const register=async(req,res)=>{
-     const users=await UserSchemaModel.find();
-   const l=users.length;
-   const _id=l==0?1:users[l-1]._id+1;
+    const users = await UserSchemaModel.find();
+    const l = users.length;
+    const _id = l === 0 ? 1 : users[l - 1]._id + 1;
 
+    const userDetails = {
+      ...req.body,
+      _id,
+      role: 'user',
+      status: 1,
+      info: Date()
+    };
 
-    const userDetails={...req.body,'_id':_id,'role':'user','status':1,'info':Date()};
-    //console.log(userDetail)
-    try{
     await UserSchemaModel.create(userDetails);
-    emailVerification(userDetails.email,userDetails.password)
-    res.status(201).json({"status":true});
-    }
-    catch (err) {
-  console.error("Error creating user:", err);
-  res.status(500).json({ status: false});
-    }
-}
+
+    emailVerification(userDetails.email, userDetails.password);
+
+    return res.status(201).json({ status: true, message: "User registered successfully" });
+  } catch (err) {
+    console.error("Error during registration:", err);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+};
 
 
 
