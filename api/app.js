@@ -13,11 +13,21 @@ import FoodRouter  from './routes/donor.router.js'
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended:true}))
 
-app.use(cors())
+//configuration to solve cross-origin problem
+app.use(cors({
+  origin: 'https://meal-bridge-vert.vercel.app',
+  Credential:true,
+  methods:["GET","POST","PUT","DELETE","PATCH"],
+  allowedHeaders:["content-type","Authorization"]
+}));
 
 //to  link router use router level middleware
 app.use("/user",UserRouter)
 app.use("/food",FoodRouter)
 
-app.listen(3001)
-console.log("server invoked at 3001 port")
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(`Server invoked at port ${PORT}`);
+});
