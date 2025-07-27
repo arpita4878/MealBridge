@@ -1,5 +1,6 @@
 import React from 'react';
 import './GetInvolved.css';
+import { Link } from 'react-router-dom';
 
 function GetInvolved() {
   return (
@@ -13,7 +14,7 @@ function GetInvolved() {
         <div className="involve-card">
           <h3>🤝 Volunteer</h3>
           <p>Give your time to help distribute food, organize events, or support logistics.</p>
-          <button onClick={() => window.location.href = "/volunteer"}>Become a Volunteer</button>
+          <button ><Link to='/volunteer'> Become a Volunteer</Link></button>
         </div>
 
         <div className="involve-card">
