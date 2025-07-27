@@ -1,0 +1,64 @@
+.gamification-dashboard {
+  background: #f5faff;
+  padding: 2rem;
+  border-radius: 10px;
+  margin: 2rem 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.progress-section {
+  margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+  background: #ddd;
+  border-radius: 8px;
+  height: 20px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-fill {
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  height: 100%;
+  width: 0%;
+  transition: width 1s ease-in-out;
+}
+
+.badges-section {
+  margin-top: 2rem;
+}
+
+.badge-list {
+  list-style: none;
+  padding: 0;
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.badge-icon {
+  font-size: 1.8rem;
+}
+
+.badge-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.challenge-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #fff9ec;
+  border-left: 4px solid #f90;
+  border-radius: 6px;
+}

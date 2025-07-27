@@ -1,27 +1,39 @@
-import { Link } from 'react-router-dom'
-import { Routes, Route } from 'react-router-dom';
-import './App.css'
-import Home from './component/Visitors/Home/Home';
+import { lazy, Suspense } from 'react';
+import { Link, Routes, Route } from 'react-router-dom';
+import './App.css';
 import Nav from './component/Visitors/Nav/Nav';
-import About from './component/Visitors/About/About';
-import Service from './component/Visitors/service/Service';
-import Contact from './component/Visitors/Contact/Conatct';
 
-import Register from './component/User/Registration/Register';
-import Login from './component/User/Login/Login';
-import Verify from './component/User/Email/verify';
-import Logout from './component/User/Logout/Logout';
-import UserHome from './component/User/Home/Home';
-import Donate from './component/User/Donate/Donate';
-import Find from './component/User/Find/Find';
-import AdminHome from './component/Admin/Home/Home';
-import MUser from './component/Admin/ManageUSer/MUser';
-import EProfile from './component/Admin/EProfle/EProfile';
-import Donation from './component/Admin/ManageDonation/Donation';
-import ViewClaim from './component/Admin/ViewClaim/ViewClaim';
-import CPassword from './component/Admin/CPassword/CPassword';
-import ImpactTracking from './component/User/ImpactTracking/ImpactTracking';
+const Home = lazy(() => import('./component/Visitors/Home/Home'));
+const About = lazy(() => import('./component/Visitors/About/About'));
+const Service = lazy(() => import('./component/Visitors/service/Service'));
+const Contact = lazy(() => import('./component/Visitors/Contact/Conatct'));
 
+const BecomePartner = lazy(() => import('./component/User/Partner/Partner'));
+const GamificationDashboard = lazy(() => import('./component/User/Badges/GamificationDashboard'));
+const Volunteer = lazy(() => import('./component/User/Volunteer/Volunteer'));
+const GetInvolved = lazy(() => import('./component/User/getInvolve/GetInvolve'));
+const Register = lazy(() => import('./component/User/Registration/Register'));
+const Login = lazy(() => import('./component/User/Login/Login'));
+const Verify = lazy(() => import('./component/User/Email/verify'));
+const Logout = lazy(() => import('./component/User/Logout/Logout'));
+const UserHome = lazy(() => import('./component/User/Home/Home'));
+const Donate = lazy(() => import('./component/User/Donate/Donate'));
+const Find = lazy(() => import('./component/User/Find/Find'));
+const EditProfile = lazy(() => import('./component/User/Eprofile/EPUser'));
+const ChangePassword = lazy(() => import('./component/User/Cpassword/ChangePassword'));
+const ImpactTracking = lazy(() => import('./component/User/ImpactTracking/ImpactTracking'));
+
+const AdminHome = lazy(() => import('./component/Admin/Home/Home'));
+const MUser = lazy(() => import('./component/Admin/ManageUSer/MUser'));
+const Donation = lazy(() => import('./component/Admin/ManageDonation/Donation'));
+const ViewClaim = lazy(() => import('./component/Admin/ViewClaim/ViewClaim'));
+const CPassword = lazy(() => import('./component/Admin/CPassword/CPassword'));
+
+const userImpactData = [
+  { icon: '🍎', label: 'Kilograms of Food Saved', value: 45 },
+  { icon: '🤝', label: 'People Helped', value: 120 },
+  { icon: '🌱', label: 'Kg CO₂ Avoided', value: 70 },
+];
 
 
 
@@ -32,32 +44,39 @@ function App() {
     <>
 
       <Nav />
+<Suspense fallback={<div className="text-center p-5">Loading...</div>}>
+  <Routes>
+    <Route path='/' element={<Home />} />
+    <Route path='/about' element={<About />} />
+    <Route path='/service' element={<Service />} />
+    <Route path='/contact' element={<Contact />} />
+    <Route path='/register' element={<Register />} />
+    <Route path='/login' element={<Login />} />
+    <Route path='/verify/:vemail' element={<Verify />} />
+    <Route path='/logout' element={<Logout />} />
+    <Route path='/user' element={<UserHome />} />
+    <Route path='/donate' element={<Donate />} />
+    <Route path='/findfood' element={<Find />} />
+    <Route path='/editprofile' element={<EditProfile />} />
+    <Route path='/changepassword' element={<ChangePassword />} />
+    <Route path='/service/impactracking' element={<ImpactTracking />} />
+    <Route path='/impactracking' element={<ImpactTracking   metrics={userImpactData}/>} />
+    <Route path='/get-involved' element={<GetInvolved />} />
+    <Route path='/volunteer' element={<Volunteer />} />
+    <Route path="/dashboard" element={<GamificationDashboard />} />
+    <Route path="/partners" element={<BecomePartner />} />
 
-      <Routes>
-        <Route path='/' element={<Home />}></Route>
-        <Route path='/about' element={<About />}></Route>
-        <Route path='/service' element={<Service />}></Route>
-        <Route path='/contact' element={<Contact />}></Route>
-        <Route path='/register' element={<Register />}></Route>
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/verify/:vemail' element={<Verify />}></Route>
-        <Route path='/logout' element={<Logout />}></Route>
-        <Route path='/user' element={<UserHome />}></Route>
-        <Route path='/donate' element={<Donate />}></Route>
-        <Route path='/findfood' element={<Find />}></Route>
-        <Route path='/admin' element={<AdminHome />}></Route>
-        <Route path='/manage-users' element={<MUser/>}></Route>
-        <Route path='/edit-profile-admin' element={<EProfile />}></Route>
-        <Route path='/manage-donations' element={<Donation />}></Route>
-        <Route path='/user-claims' element={<ViewClaim />}></Route>
-        <Route path='/change-password-admin' element={<CPassword />}></Route>
-        <Route path='/service/impactracking' element={<ImpactTracking/>}></Route>
-      </Routes>
-
-
+    <Route path='/admin' element={<AdminHome />} />
+    <Route path='/manage-users' element={<MUser />} />
+    <Route path='/manage-donations' element={<Donation />} />
+    <Route path='/user-claims' element={<ViewClaim />} />
+  </Routes>
+</Suspense>
 
       {/*  Back to Top*/}
-      <Link to="/">   <a class="btn btn-md-square btn-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a> </Link>
+<Link to="/" className="btn btn-md-square btn-primary rounded-circle back-to-top">
+  <i className="fa fa-arrow-up"></i>
+</Link>
 
 
     </>

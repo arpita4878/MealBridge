@@ -1,21 +1,17 @@
+.captcha-box {
+  padding: 6px 12px;
+  font-size: 22px;
+  color: red;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  letter-spacing: 6px;
+  text-decoration: line-through;
+  user-select: none;
+}
 .success-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.8);
   z-index: 10;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.success-animation {
-  animation: bounce 1s ease infinite;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0 }
-  to { opacity: 1 }
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
 }

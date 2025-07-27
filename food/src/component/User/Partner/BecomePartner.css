@@ -1,0 +1,54 @@
+.partner-form-section {
+  background: #f8faff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 700px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.partner-intro {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.partner-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.partner-form input,
+.partner-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  font-size: 1rem;
+}
+
+.partner-form button {
+  margin-top: 1rem;
+  background: #0072ff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.partner-form button:hover {
+  background: #005edc;
+}
+
+.partner-success {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #e0ffea;
+  border-left: 4px solid #28a745;
+  border-radius: 8px;
+}

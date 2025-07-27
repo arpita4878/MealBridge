@@ -1,91 +1,100 @@
-/* ImpactTracking.css */
+.impact-tracking {
+  padding: 2rem;
+  background: #f7f7f7;
+  border-radius: 8px;
+}
 
-.impact-tracking-container {
-  max-width: 520px;
-  margin: 3rem auto;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 12px 24px rgb(0 0 0 / 0.1);
-  padding: 2.5rem 3rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2e2e2e;
+.impact-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .impact-title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .impact-subtitle {
   font-size: 1rem;
-  color: #666;
-  margin-bottom: 2.5rem;
-  text-align: center;
+  color: #555;
 }
 
 .impact-cards {
   display: flex;
-  justify-content: space-between;
-  gap: 2rem;
   flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
 }
 
 .impact-card {
-  background: #f3f7fb;
-  border-radius: 14px;
-  padding: 1.8rem 2rem;
-  width: 48%;
-  box-shadow: 0 8px 15px rgb(0 0 0 / 0.05);
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 250px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
-  transition: box-shadow 0.25s ease;
-}
-
-.impact-card:hover {
-  box-shadow: 0 12px 28px rgb(0 0 0 / 0.15);
+  gap: 1rem;
 }
 
 .impact-icon {
-  font-size: 3.5rem;
-  margin-right: 1.5rem;
-  flex-shrink: 0;
-}
-
-.food-icon {
-  color: #ff6347; /* tomato red */
-}
-
-.people-icon {
-  color: #28a745; /* bootstrap green */
-}
-
-.impact-info {
-  flex-grow: 1;
+  font-size: 2.5rem;
 }
 
 .impact-number {
-  font-size: 2.6rem;
-  font-weight: 800;
+  font-size: 1.75rem;
   margin: 0;
-  line-height: 1;
-  color: #111;
 }
 
 .impact-label {
-  font-size: 1rem;
-  color: #444;
-  margin-top: 0.3rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  color: #777;
+  margin: 0;
+}
+.impact-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .impact-cards {
-    flex-direction: column;
-  }
-  .impact-card {
-    width: 100%;
-  }
+.impact-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Tooltip styling handled by recharts Tooltip component */
+.impact-testimonials {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.testimonial-card {
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.impact-cta {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #007bff;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.impact-cta button {
+  margin-top: 1rem;
+  background: white;
+  color: #007bff;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.impact-cta button:hover {
+  background-color: #e6e6e6;
 }
