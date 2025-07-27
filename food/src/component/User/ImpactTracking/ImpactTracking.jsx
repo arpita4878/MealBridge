@@ -2,6 +2,7 @@ import React from 'react';
 import CountUp from 'react-countup';
 import SocialSharing from './SocialSharing.jsx';
 import './ImpactTracking.css';
+import { Link } from 'react-router-dom';
 
 const ImpactCard = ({ icon, label, value }) => (
   <article className="impact-card" role="listitem" aria-label={`${value.toLocaleString()} ${label}`}>
@@ -14,6 +15,7 @@ const ImpactCard = ({ icon, label, value }) => (
     </div>
   </article>
 );
+
 
 const testimonials = [
   { name: "Maria G.", quote: "Thanks to this platform, my children are eating healthy every day." },
