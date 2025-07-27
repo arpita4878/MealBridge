@@ -14,19 +14,19 @@ function GetInvolved() {
         <div className="involve-card">
           <h3>🤝 Volunteer</h3>
           <p>Give your time to help distribute food, organize events, or support logistics.</p>
-          <button ><Link to='/volunteer'> Become a Volunteer</Link></button>
+          <button className="involve-button" ><Link to='/volunteer'> Become a Volunteer</Link></button>
         </div>
 
         <div className="involve-card">
           <h3>💝 Donate</h3>
           <p>Your donation helps us save more food and reach more people in need.</p>
-          <button onClick={() => window.location.href = "/donate"}>Donate Now</button>
+          <button className="involve-button"> <Link to='/donate'> Donate Now  </Link></button>
         </div>
 
         <div className="involve-card">
           <h3>📣 Partner With Us</h3>
           <p>Are you an organization or food business? Let’s team up and expand our impact.</p>
-          <button onClick={() => window.location.href = "/partners"}>Become a Partner</button>
+          <button className="involve-button"><Link  to='/partners'>Become a Partner </Link></button>
         </div>
       </div>
     </section>

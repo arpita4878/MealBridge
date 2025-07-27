@@ -38,7 +38,7 @@ const CallToAction = () => (
   <div className="impact-cta">
     <h3>Want to Make a Bigger Difference?</h3>
     <p>Join our volunteer network or donate to help us expand our reach.</p>
-    <button onClick={() => window.location.href = "/get-involved"}>Get Involved</button>
+    <button className="involve-button"><Link to='/get-involved'> Get Involved</Link></button>
   </div>
 );
 
