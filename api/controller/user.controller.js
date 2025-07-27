@@ -1,41 +1,52 @@
 import "../model/connection.js"
-import url from 'url';
-import jwt from 'jsonwebtoken';
-import rs from 'randomstring';
-import UserSchemaModel from "../model/user.model.js";
-import emailVerification from "./email.controller.js";
+import url from  'url'
+import jwt from 'jsonwebtoken'
+import rs from 'randomstring'
 
-export const register = async (req, res) => {
+import UserSchemaModel from "../model/user.model.js"
+import emailVerification from "./email.controller.js"
+
+
+export const register=async(req,res)=>{
+     const users=await UserSchemaModel.find();
+   const l=users.length;
+   const _id=l==0?1:users[l-1]._id+1;
+
+
+    const userDetails={...req.body,'_id':_id,'role':'user','status':1,'info':Date()};
+    //console.log(userDetail)
+    try{
+    await UserSchemaModel.create(userDetails);
+    emailVerification(userDetails.email,userDetails.password)
+    res.status(201).json({"status":true});
+    }
+    catch (err) {
+  console.error("Error creating user:", err);
+  res.status(500).json({ status: false});
+    }
+}
+
+
+export const checkEmail = async (req, res) => {
   try {
-    const existingUser = await UserSchemaModel.findOne({ email: req.body.email });
+    const { email } = req.query;
 
-    if (existingUser) {
-      return res.status(409).json({ status: false, message: "User already registered" });
+    if (!email) {
+      return res.status(400).json({ exists: false, message: "Email is required" });
     }
 
-    const users = await UserSchemaModel.find();
-    const l = users.length;
-    const _id = l === 0 ? 1 : users[l - 1]._id + 1;
+    const user = await UserSchemaModel.findOne({ email });
 
-    const userDetails = {
-      ...req.body,
-      _id,
-      role: 'user',
-      status: 1,
-      info: Date()
-    };
-
-    await UserSchemaModel.create(userDetails);
-
-    emailVerification(userDetails.email, userDetails.password);
-
-    return res.status(201).json({ status: true, message: "User registered successfully" });
+    if (user) {
+      return res.status(200).json({ exists: true });
+    } else {
+      return res.status(200).json({ exists: false });
+    }
   } catch (err) {
-    console.error("Error during registration:", err);
-    return res.status(500).json({ status: false, message: "Internal server error" });
+    console.error("Error checking email:", err);
+    return res.status(500).json({ exists: false, message: "Internal server error" });
   }
 };
-
 
 
  export const login=async(req,res)=>{

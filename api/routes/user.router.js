@@ -5,6 +5,8 @@ const router=express.Router()
 
 router.post("/login",UserController.login)
 
+router.get('/check-email', UserController.checkEmail);
+
 router.post("/register",UserController.register)
 
 router.patch("/update",UserController.update)
