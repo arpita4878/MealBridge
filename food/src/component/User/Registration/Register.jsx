@@ -42,8 +42,9 @@ function Register() {
       setMobile('');
       setAddress('');
       setOutput('User registered successfully!');
-    }).catch(() => {
+    }).catch((error) => {
       setOutput('Registration failed, please try again...');
+      console.log(error)
     });
   };
 
