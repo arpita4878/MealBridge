@@ -1,5 +1,5 @@
 import './Register.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __userapiurl } from '../../../Api_Url';
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,6 +19,28 @@ function Register() {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Your Google Client ID here
+  const CLIENT_ID = '906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com';
+
+  useEffect(() => {
+    // Initialize Google Sign-In button
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleGoogleResponse,
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById('googleSignUpDiv'),
+        {
+          theme: 'outline',
+          size: 'large',
+          text: 'signup_with',
+        }
+      );
+    }
+  }, []);
 
   const validate = () => {
     const newError = {};
@@ -97,10 +119,46 @@ function Register() {
     }
   };
 
+  // Google Sign-Up handler
+  const handleGoogleResponse = async (response) => {
+    try {
+      setLoading(true);
+      const res = await axios.post(`${__userapiurl}google-login`, {
+        token: response.credential,
+      });
+
+      const user = res.data.userDetails;
+      localStorage.setItem('token', res.data.token);
+      Object.entries(user).forEach(([key, value]) => localStorage.setItem(key, value));
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Google Sign Up Successful!',
+        text: 'Welcome to MealBridge!',
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
+      setTimeout(() => {
+        navigate(user.role === 'admin' ? '/admin' : '/user');
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Google Sign Up Failed',
+        text: 'Please try again later.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container-fluid contact py-6 wow fadeInUp" data-wow-delay="0.1s">
       <div className="container">
         <div className="bg-light shadow p-5 rounded-4 border border-primary-subtle">
+
           <div className="text-center mb-5">
             <h2 className="display-6 fw-semibold">Create Your Account</h2>
             <p className="text-muted">Join MealBridge to help reduce food waste and feed those in need.</p>
@@ -116,6 +174,7 @@ function Register() {
                 placeholder="Full Name"
                 value={form.name}
                 onChange={handleChange}
+                disabled={loading}
               />
               {error.name && <small className="text-danger">{error.name}</small>}
             </div>
@@ -129,6 +188,7 @@ function Register() {
                 placeholder="Email Address"
                 value={form.email}
                 onChange={handleChange}
+                disabled={loading}
               />
               {error.email && <small className="text-danger">{error.email}</small>}
             </div>
@@ -142,6 +202,7 @@ function Register() {
                 placeholder="Mobile Number"
                 value={form.mobile}
                 onChange={handleChange}
+                disabled={loading}
               />
               {error.mobile && <small className="text-danger">{error.mobile}</small>}
             </div>
@@ -155,6 +216,7 @@ function Register() {
                 placeholder="Create Password"
                 value={form.password}
                 onChange={handleChange}
+                disabled={loading}
               />
               {error.password && <small className="text-danger">{error.password}</small>}
             </div>
@@ -166,6 +228,7 @@ function Register() {
                 name="city"
                 value={form.city}
                 onChange={handleChange}
+                disabled={loading}
               >
                 <option value="">Select City</option>
                 <option value="Indore">Indore</option>
@@ -185,6 +248,7 @@ function Register() {
                 placeholder="Address / Location"
                 value={form.address}
                 onChange={handleChange}
+                disabled={loading}
               />
               {error.address && <small className="text-danger">{error.address}</small>}
             </div>
@@ -196,6 +260,7 @@ function Register() {
                 name="gender"
                 value={form.gender}
                 onChange={handleChange}
+                disabled={loading}
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -230,6 +295,13 @@ function Register() {
               </p>
             </div>
           </div>
+
+          {/* Google Sign-Up Button */}
+          <div className="text-center my-4">
+            <p>Or sign up using</p>
+            <div id="googleSignUpDiv"></div>
+          </div>
+
         </div>
       </div>
     </div>
