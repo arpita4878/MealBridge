@@ -41,10 +41,11 @@ function Login() {
     refreshCaptcha();
 
     // Initialize Google Sign-In
-    window.google?.accounts.id.initialize({
-      client_id: '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', 
-      callback: handleGoogleResponse,
-    });
+   window.google?.accounts.id.initialize({
+  client_id: '906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com',
+  callback: handleGoogleResponse,
+});
+
 
     window.google?.accounts.id.renderButton(
       document.getElementById('googleSignInDiv'),
