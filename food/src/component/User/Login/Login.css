@@ -107,3 +107,16 @@ button:disabled {
     padding: 2rem 1.5rem;
   }
 }
+/* Collapsible form wrapper */
+.collapse-form {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+/* When expanded */
+.collapse-form.expanded {
+  max-height: 800px; /* Adjust depending on form height */
+  opacity: 1;
+}

@@ -124,25 +124,25 @@ function Login() {
               <p className={`mt-2 fw-semibold ${success ? 'text-success' : 'text-danger'}`}>{output}</p>
             )}
           </div>
+{!showForm && (
+  <>
+    <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
+    <p className="text-center text-muted">or</p>
+    <div className="text-center">
+      <button
+        type="button"
+        className="btn btn-outline-secondary"
+        onClick={() => setShowForm(true)}
+      >
+        Login with Password
+      </button>
+    </div>
+  </>
+)}
 
-          {!showForm && (
-            <>
-              <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
-              <p className="text-center text-muted">or</p>
-              <div className="text-center">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={() => setShowForm(true)}
-                >
-                  Login with Password
-                </button>
-              </div>
-            </>
-          )}
+<div className={`collapse-form ${showForm ? 'expanded' : ''}`}>
+  <form onSubmit={handleSubmit} noValidate>
 
-          <div className={`collapse-form ${showForm ? 'expanded' : ''}`}>
-            <form onSubmit={handleSubmit} noValidate>
               <div className="mb-3">
                 <input
                   type="email"
