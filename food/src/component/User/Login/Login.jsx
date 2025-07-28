@@ -11,11 +11,12 @@ function Login() {
   const [output, setOutput] = useState('');
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [error, setError] = useState({});
   const [captchaText, setCaptchaText] = useState('');
   const [userInputCaptcha, setUserInputCaptcha] = useState('');
   const [captchaError, setCaptchaError] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // optional theme toggle
 
   const validate = () => {
     const newError = {};
@@ -41,11 +42,10 @@ function Login() {
     refreshCaptcha();
 
     // Initialize Google Sign-In
-   window.google?.accounts.id.initialize({
-  client_id: '906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com',
-  callback: handleGoogleResponse,
-});
-
+    window.google?.accounts.id.initialize({
+      client_id: '906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com',
+      callback: handleGoogleResponse,
+    });
 
     window.google?.accounts.id.renderButton(
       document.getElementById('googleSignInDiv'),
@@ -109,102 +109,111 @@ function Login() {
       setUserInputCaptcha('');
       refreshCaptcha();
       console.log(err);
-      
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="w-100 px-3" style={{ maxWidth: '420px' }}>
-        <div className="container border rounded shadow p-4 bg-white position-relative">
-
-          {success && (
-            <div className="success-overlay d-flex justify-content-center align-items-center">
-              <div className="success-animation text-success text-center">
-                <i className="fas fa-check-circle fa-3x mb-2"></i>
-                <h6 className="fw-bold">Login Successful</h6>
-              </div>
-            </div>
-          )}
-
+    <div className={`login-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+      <div className="login-container">
+        <div className="login-box shadow bg-white rounded p-4">
           <div className="text-center mb-3">
-            <h3 className="fw-bold">Log In</h3>
+            <h3 className="fw-bold">{showForm ? 'Log In with Email' : 'Log In'}</h3>
             {output && (
               <p className={`mt-2 fw-semibold ${success ? 'text-success' : 'text-danger'}`}>{output}</p>
             )}
           </div>
 
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="mb-3">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
-              />
-              {error.email && <small className="text-danger fw-semibold">{error.email}</small>}
-            </div>
-
-            <div className="mb-3">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
-              />
-              {error.password && <small className="text-danger fw-semibold">{error.password}</small>}
-            </div>
-
-            <div className="mb-3 text-center">
-              <div className="d-flex justify-content-center align-items-center">
-                <span className="captcha-box">{captchaText}</span>
-                <i
-                  className="fa fa-sync ms-2"
-                  title="Refresh Captcha"
-                  style={{ cursor: 'pointer' }}
-                  onClick={refreshCaptcha}
-                ></i>
+          {!showForm && (
+            <>
+              <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
+              <p className="text-center text-muted">or</p>
+              <div className="text-center">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => setShowForm(true)}
+                >
+                  Login with Email
+                </button>
               </div>
-              <input
-                type="text"
-                className="form-control mt-2"
-                placeholder="Enter captcha"
-                value={userInputCaptcha}
-                onChange={(e) => setUserInputCaptcha(e.target.value)}
-                disabled={isLoading}
-              />
-              {captchaError && <small className="text-danger">{captchaError}</small>}
-            </div>
+            </>
+          )}
 
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary px-4 py-2 w-100" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Login'}
-              </button>
-            </div>
+          <div className={`collapse-form ${showForm ? 'expanded' : ''}`}>
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="mb-3">
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                />
+                {error.email && <small className="text-danger">{error.email}</small>}
+              </div>
 
-            <div className="my-3 text-center">
-              <p className="text-muted">or</p>
-              <div id="googleSignInDiv"></div>
-              {isLoading && (
-                <div className="d-flex justify-content-center mt-2">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Logging in...</span>
-                  </div>
+              <div className="mb-3">
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
+                />
+                {error.password && <small className="text-danger">{error.password}</small>}
+              </div>
+
+              <div className="mb-3 text-center">
+                <div className="d-flex justify-content-center align-items-center">
+                  <span className="captcha-box">{captchaText}</span>
+                  <i
+                    className="fa fa-sync ms-2"
+                    title="Refresh Captcha"
+                    style={{ cursor: 'pointer' }}
+                    onClick={refreshCaptcha}
+                  ></i>
                 </div>
-              )}
-            </div>
+                <input
+                  type="text"
+                  className="form-control mt-2"
+                  placeholder="Enter captcha"
+                  value={userInputCaptcha}
+                  onChange={(e) => setUserInputCaptcha(e.target.value)}
+                  disabled={isLoading}
+                />
+                {captchaError && <small className="text-danger">{captchaError}</small>}
+              </div>
 
-            <p className="text-center text-muted">
-              Don’t have an account?{' '}
-              <Link to="/register" className="text-primary fw-bold">Register</Link>
-            </p>
-          </form>
+              <div className="text-center">
+                <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>
+                  {isLoading ? 'Logging in...' : 'Login'}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {isLoading && (
+            <div className="d-flex justify-content-center mt-3">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Logging in...</span>
+              </div>
+            </div>
+          )}
+
+          <p className="text-center text-muted mt-3">
+            Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
+          </p>
+
+          {/* Optional: Dark mode toggle */}
+          <div className="text-center mt-2">
+            <button className="btn btn-sm btn-outline-dark" onClick={() => setDarkMode(!darkMode)}>
+              Toggle {darkMode ? 'Light' : 'Dark'} Mode
+            </button>
+          </div>
         </div>
       </div>
     </div>

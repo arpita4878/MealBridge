@@ -297,10 +297,10 @@ function Register() {
           </div>
 
           {/* Google Sign-Up Button */}
-          <div className="text-center my-4">
+          {/* <div className="text-center my-4">
             <p>Or sign up using</p>
             <div id="googleSignUpDiv"></div>
-          </div>
+          </div> */}
 
         </div>
       </div>
