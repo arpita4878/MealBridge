@@ -88,9 +88,14 @@ export const googleLogin = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Google login error:', error);
-    return res.status(401).json({ message: 'Invalid Google token' });
+  console.error('Google login error:', error);
+  if (error.response) {
+    console.error('Google API response error:', error.response.data);
+  } else if (error.message) {
+    console.error('Error message:', error.message);
   }
+  return res.status(401).json({ message: 'Invalid Google token' });
+}
 };
 
 export const checkEmail = async (req, res) => {
