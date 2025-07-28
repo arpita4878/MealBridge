@@ -208,6 +208,15 @@ function Login() {
             Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
           </p>
 
+          {showForm && (
+  <div className="text-center mt-3">
+    <button className="btn btn-link" onClick={() => setShowForm(false)}>
+      ← Back to Google Login
+    </button>
+  </div>
+)}
+
+
           {/* Optional: Dark mode toggle */}
           <div className="text-center mt-2">
             <button className="btn btn-sm btn-outline-dark" onClick={() => setDarkMode(!darkMode)}>
