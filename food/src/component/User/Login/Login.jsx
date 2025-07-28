@@ -135,7 +135,7 @@ function Login() {
                   className="btn btn-outline-secondary"
                   onClick={() => setShowForm(true)}
                 >
-                  Login with Email
+                  Login with Password
                 </button>
               </div>
             </>
