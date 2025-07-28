@@ -16,6 +16,7 @@ function Login() {
   const [userInputCaptcha, setUserInputCaptcha] = useState('');
   const [captchaError, setCaptchaError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // optional theme toggle
 
   const validate = () => {
     const newError = {};
@@ -114,108 +115,106 @@ function Login() {
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="login-container shadow rounded p-5">
-        <h3 className="fw-bold mb-4 text-center">{showForm ? 'Log In with Email' : 'Log In'}</h3>
-        
-        {output && (
-          <p className={`mb-4 text-center fw-semibold ${success ? 'text-success' : 'text-danger'}`}>
-            {output}
-          </p>
-        )}
+    <div className={`login-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+      <div className="login-container">
+        <div className="login-box shadow bg-white rounded p-4">
+          <div className="text-center mb-3">
+            <h3 className="fw-bold">{showForm ? 'Log In with Email' : 'Log In'}</h3>
+            {output && (
+              <p className={`mt-2 fw-semibold ${success ? 'text-success' : 'text-danger'}`}>{output}</p>
+            )}
+          </div>
 
-        {!showForm ? (
-          <>
-            <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
-            <p className="text-center text-muted my-3">or</p>
-            <div className="text-center">
-              <button
-                type="button"
-                className="btn btn-outline-primary"
-                onClick={() => setShowForm(true)}
-              >
-                Login with Email & Password
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="form-wrapper">
+          {!showForm && (
+            <>
+              <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
+              <p className="text-center text-muted">or</p>
+              <div className="text-center">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => setShowForm(true)}
+                >
+                  Login with Email
+                </button>
+              </div>
+            </>
+          )}
+
+          <div className={`collapse-form ${showForm ? 'expanded' : ''}`}>
             <form onSubmit={handleSubmit} noValidate>
               <div className="mb-3">
                 <input
                   type="email"
-                  className={`form-control ${error.email ? 'is-invalid' : ''}`}
+                  className="form-control"
                   placeholder="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
-                  autoFocus
                 />
-                {error.email && <div className="invalid-feedback">{error.email}</div>}
+                {error.email && <small className="text-danger">{error.email}</small>}
               </div>
 
               <div className="mb-3">
                 <input
                   type="password"
-                  className={`form-control ${error.password ? 'is-invalid' : ''}`}
+                  className="form-control"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
                 />
-                {error.password && <div className="invalid-feedback">{error.password}</div>}
+                {error.password && <small className="text-danger">{error.password}</small>}
               </div>
 
               <div className="mb-3 text-center">
-                <div className="d-flex justify-content-center align-items-center captcha-section">
+                <div className="d-flex justify-content-center align-items-center">
                   <span className="captcha-box">{captchaText}</span>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-light ms-3"
-                    onClick={refreshCaptcha}
+                  <i
+                    className="fa fa-sync ms-2"
                     title="Refresh Captcha"
-                    disabled={isLoading}
-                  >
-                    <i className="fa fa-sync"></i>
-                  </button>
+                    style={{ cursor: 'pointer' }}
+                    onClick={refreshCaptcha}
+                  ></i>
                 </div>
                 <input
                   type="text"
-                  className={`form-control mt-2 ${captchaError ? 'is-invalid' : ''}`}
+                  className="form-control mt-2"
                   placeholder="Enter captcha"
                   value={userInputCaptcha}
                   onChange={(e) => setUserInputCaptcha(e.target.value)}
                   disabled={isLoading}
                 />
-                {captchaError && <div className="invalid-feedback">{captchaError}</div>}
+                {captchaError && <small className="text-danger">{captchaError}</small>}
               </div>
 
-              <div className="d-grid">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isLoading}
-                >
+              <div className="text-center">
+                <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>
                   {isLoading ? 'Logging in...' : 'Login'}
                 </button>
               </div>
             </form>
-
-            <div className="text-center mt-3">
-              <button
-                className="btn btn-link"
-                onClick={() => setShowForm(false)}
-                disabled={isLoading}
-              >
-                ← Back to Google Login
-              </button>
-            </div>
           </div>
-        )}
 
-        <p className="text-center text-muted mt-4">
-          Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
-        </p>
+          {isLoading && (
+            <div className="d-flex justify-content-center mt-3">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Logging in...</span>
+              </div>
+            </div>
+          )}
+
+          <p className="text-center text-muted mt-3">
+            Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
+          </p>
+
+          {/* Optional: Dark mode toggle */}
+          <div className="text-center mt-2">
+            <button className="btn btn-sm btn-outline-dark" onClick={() => setDarkMode(!darkMode)}>
+              Toggle {darkMode ? 'Light' : 'Dark'} Mode
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
