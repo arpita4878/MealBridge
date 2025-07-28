@@ -16,13 +16,7 @@ function Login() {
   const [userInputCaptcha, setUserInputCaptcha] = useState('');
   const [captchaError, setCaptchaError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Detect system theme
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(systemDark);
-  }, []);
+  const [darkMode, setDarkMode] = useState(false); // optional theme toggle
 
   const validate = () => {
     const newError = {};
@@ -47,6 +41,7 @@ function Login() {
   useEffect(() => {
     refreshCaptcha();
 
+    // Initialize Google Sign-In
     window.google?.accounts.id.initialize({
       client_id: '906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com',
       callback: handleGoogleResponse,
@@ -121,40 +116,32 @@ function Login() {
 
   return (
     <div className={`login-wrapper ${darkMode ? 'dark-mode' : ''}`}>
-      <div className="theme-toggle">
-        <button
-          className="btn btn-sm btn-outline-light"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? '🌞 Light' : '🌙 Dark'}
-        </button>
-      </div>
-
       <div className="login-container">
-        <div className="login-box shadow p-4 rounded">
-
+        <div className="login-box shadow bg-white rounded p-4">
           <div className="text-center mb-3">
-            <h3 className="fw-bold">{showForm ? 'Login with Email' : 'Log In'}</h3>
+            <h3 className="fw-bold">{showForm ? 'Log In with Email' : 'Log In'}</h3>
             {output && (
               <p className={`mt-2 fw-semibold ${success ? 'text-success' : 'text-danger'}`}>{output}</p>
             )}
           </div>
 
-          <div className={`transition-box ${showForm ? 'hide' : 'show'}`}>
-            <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
-            <p className="text-center text-muted">or</p>
-            <div className="text-center">
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={() => setShowForm(true)}
-              >
-                Login with Email
-              </button>
-            </div>
-          </div>
+          {!showForm && (
+            <>
+              <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
+              <p className="text-center text-muted">or</p>
+              <div className="text-center">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => setShowForm(true)}
+                >
+                  Login with Password
+                </button>
+              </div>
+            </>
+          )}
 
-          <div className={`transition-box ${showForm ? 'show' : 'hide'}`}>
+          <div className={`collapse-form ${showForm ? 'expanded' : ''}`}>
             <form onSubmit={handleSubmit} noValidate>
               <div className="mb-3">
                 <input
@@ -206,17 +193,6 @@ function Login() {
                   {isLoading ? 'Logging in...' : 'Login'}
                 </button>
               </div>
-
-              <div className="text-center mt-3">
-                <button
-                  type="button"
-                  className="btn btn-link text-muted"
-                  onClick={() => setShowForm(false)}
-                  disabled={isLoading}
-                >
-                  ← Back to Google Login
-                </button>
-              </div>
             </form>
           </div>
 
@@ -231,10 +207,17 @@ function Login() {
           <p className="text-center text-muted mt-3">
             Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
           </p>
+
+          {/* Optional: Dark mode toggle */}
+          <div className="text-center mt-2">
+            <button className="btn btn-sm btn-outline-dark" onClick={() => setDarkMode(!darkMode)}>
+              Toggle {darkMode ? 'Light' : 'Dark'} Mode
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
-}
+} 
 
-export default Login;
+export default Login; 
