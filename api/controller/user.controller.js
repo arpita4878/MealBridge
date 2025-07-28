@@ -2,6 +2,7 @@ import "../model/connection.js"
 import url from  'url'
 import jwt from 'jsonwebtoken'
 import rs from 'randomstring'
+import { OAuth2Client } from 'google-auth-library';
 
 import UserSchemaModel from "../model/user.model.js"
 import emailVerification from "./email.controller.js"
@@ -26,6 +27,71 @@ export const register=async(req,res)=>{
     }
 }
 
+
+const CLIENT_ID = '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';
+const client = new OAuth2Client(CLIENT_ID);
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_here';
+export const googleLogin = async (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(400).json({ message: 'Token is required' });
+
+  try {
+    // Verify token with Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    let { email, name, picture, sub: googleId } = payload;
+
+    // Normalize name to uppercase (optional, to match your schema)
+    name = name.toUpperCase().trim();
+
+    // Check if user exists by email or googleId
+    let user = await UserSchemaModel.findOne({ 
+      $or: [{ email }, { googleId }] 
+    });
+
+    if (!user) {
+      // Create new user if doesn't exist
+      user = new UserSchemaModel({
+        name,
+        email,
+        avatar: picture,
+        role: 'user',
+        isGoogleUser: true,
+        googleId,
+        status: 1,
+        info: new Date(),
+      });
+
+      await user.save();
+    }
+
+    // Generate JWT for frontend authentication
+    const jwtToken = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    return res.json({
+      token: jwtToken,
+      userDetails: {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        role: user.role,
+      }
+    });
+  } catch (error) {
+    console.error('Google login error:', error);
+    return res.status(401).json({ message: 'Invalid Google token' });
+  }
+};
 
 export const checkEmail = async (req, res) => {
   try {

@@ -10,13 +10,13 @@ function Login() {
   const [password, setPassword] = useState('');
   const [output, setOutput] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [error, setError] = useState({});
   const [captchaText, setCaptchaText] = useState('');
   const [userInputCaptcha, setUserInputCaptcha] = useState('');
   const [captchaError, setCaptchaError] = useState('');
 
-  // Validate form inputs
   const validate = () => {
     const newError = {};
     if (!email) newError.email = 'Email is required';
@@ -26,13 +26,11 @@ function Login() {
     return Object.keys(newError).length === 0;
   };
 
-  // Generate a random CAPTCHA
   const generateCaptcha = (length = 5) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
   };
 
-  // Refresh CAPTCHA
   const refreshCaptcha = () => {
     setCaptchaText(generateCaptcha());
     setUserInputCaptcha('');
@@ -41,7 +39,45 @@ function Login() {
 
   useEffect(() => {
     refreshCaptcha();
+
+    // Initialize Google Sign-In
+    window.google?.accounts.id.initialize({
+      client_id: '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', 
+      callback: handleGoogleResponse,
+    });
+
+    window.google?.accounts.id.renderButton(
+      document.getElementById('googleSignInDiv'),
+      {
+        theme: 'outline',
+        size: 'large',
+        text: 'signin_with',
+      }
+    );
   }, []);
+
+  const handleGoogleResponse = async (response) => {
+    try {
+      setIsLoading(true);
+      const res = await axios.post(`${__userapiurl}google-login`, {
+        token: response.credential,
+      });
+
+      const user = res.data.userDetails;
+      localStorage.setItem('token', res.data.token);
+      Object.entries(user).forEach(([key, value]) => localStorage.setItem(key, value));
+
+      setSuccess(true);
+      setOutput('Successfully Logged In! Redirecting...');
+      setTimeout(() => {
+        navigate(user.role === 'admin' ? '/admin' : '/user');
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+      setOutput('Google login failed');
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,10 +89,12 @@ function Login() {
     }
 
     try {
+      setIsLoading(true);
       const res = await axios.post(`${__userapiurl}login`, { email, password });
+
       const user = res.data.userDetails;
       localStorage.setItem('token', res.data.token);
-      Object.keys(user).forEach((key) => localStorage.setItem(key, user[key]));
+      Object.entries(user).forEach(([key, value]) => localStorage.setItem(key, value));
 
       setSuccess(true);
       setOutput('Successfully Logged In! Redirecting...');
@@ -69,6 +107,10 @@ function Login() {
       setPassword('');
       setUserInputCaptcha('');
       refreshCaptcha();
+      console.log(err);
+      
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,7 +119,6 @@ function Login() {
       <div className="w-100 px-3" style={{ maxWidth: '420px' }}>
         <div className="container border rounded shadow p-4 bg-white position-relative">
 
-          {/* Success Animation */}
           {success && (
             <div className="success-overlay d-flex justify-content-center align-items-center">
               <div className="success-animation text-success text-center">
@@ -95,7 +136,6 @@ function Login() {
           </div>
 
           <form onSubmit={handleSubmit} noValidate>
-            {/* Email Field */}
             <div className="mb-3">
               <input
                 type="email"
@@ -103,12 +143,11 @@ function Login() {
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
+                disabled={isLoading}
               />
               {error.email && <small className="text-danger fw-semibold">{error.email}</small>}
             </div>
 
-            {/* Password Field */}
             <div className="mb-3">
               <input
                 type="password"
@@ -116,19 +155,14 @@ function Login() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                disabled={isLoading}
               />
               {error.password && <small className="text-danger fw-semibold">{error.password}</small>}
             </div>
 
-            {/* Captcha Field */}
             <div className="mb-3 text-center">
               <div className="d-flex justify-content-center align-items-center">
-                <span
-                  className="captcha-box"
-                >
-                  {captchaText}
-                </span>
+                <span className="captcha-box">{captchaText}</span>
                 <i
                   className="fa fa-sync ms-2"
                   title="Refresh Captcha"
@@ -142,22 +176,32 @@ function Login() {
                 placeholder="Enter captcha"
                 value={userInputCaptcha}
                 onChange={(e) => setUserInputCaptcha(e.target.value)}
-                required
+                disabled={isLoading}
               />
               {captchaError && <small className="text-danger">{captchaError}</small>}
             </div>
 
-            {/* Submit */}
             <div className="text-center">
-              <button type="submit" className="btn btn-primary px-4 py-2 w-100">Login</button>
+              <button type="submit" className="btn btn-primary px-4 py-2 w-100" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Login'}
+              </button>
             </div>
 
-            {/* Footer Links */}
-            <p className="mt-4 text-center text-muted">
+            <div className="my-3 text-center">
+              <p className="text-muted">or</p>
+              <div id="googleSignInDiv"></div>
+              {isLoading && (
+                <div className="d-flex justify-content-center mt-2">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Logging in...</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <p className="text-center text-muted">
               Don’t have an account?{' '}
-              <Link to="/register" className="fw-bold text-decoration-none text-primary">
-                Register
-              </Link>
+              <Link to="/register" className="text-primary fw-bold">Register</Link>
             </p>
           </form>
         </div>
