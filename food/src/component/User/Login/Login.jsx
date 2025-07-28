@@ -114,101 +114,108 @@ function Login() {
   };
 
   return (
-    <div >
-      <div className="login-container">
-        <div className="login-box shadow bg-white rounded p-4">
-          <div className="text-center mb-3">
-            <h3 className="fw-bold">{showForm ? 'Log In with Email' : 'Log In'}</h3>
-            {output && (
-              <p className={`mt-2 fw-semibold ${success ? 'text-success' : 'text-danger'}`}>{output}</p>
-            )}
-          </div>
+    <div className="login-wrapper">
+      <div className="login-container shadow rounded p-5">
+        <h3 className="fw-bold mb-4 text-center">{showForm ? 'Log In with Email' : 'Log In'}</h3>
+        
+        {output && (
+          <p className={`mb-4 text-center fw-semibold ${success ? 'text-success' : 'text-danger'}`}>
+            {output}
+          </p>
+        )}
 
-          {!showForm && (
-            <>
-              <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
-              <p className="text-center text-muted">or</p>
-              <div className="text-center">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={() => setShowForm(true)}
-                >
-                  Login with Email
-                </button>
-              </div>
-            </>
-          )}
-
-          <div className={`collapse-form ${showForm ? 'expanded' : ''}`}>
+        {!showForm ? (
+          <>
+            <div id="googleSignInDiv" className="d-flex justify-content-center mb-3" />
+            <p className="text-center text-muted my-3">or</p>
+            <div className="text-center">
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                onClick={() => setShowForm(true)}
+              >
+                Login with Email & Password
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="form-wrapper">
             <form onSubmit={handleSubmit} noValidate>
               <div className="mb-3">
                 <input
                   type="email"
-                  className="form-control"
+                  className={`form-control ${error.email ? 'is-invalid' : ''}`}
                   placeholder="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
+                  autoFocus
                 />
-                {error.email && <small className="text-danger">{error.email}</small>}
+                {error.email && <div className="invalid-feedback">{error.email}</div>}
               </div>
 
               <div className="mb-3">
                 <input
                   type="password"
-                  className="form-control"
+                  className={`form-control ${error.password ? 'is-invalid' : ''}`}
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
                 />
-                {error.password && <small className="text-danger">{error.password}</small>}
+                {error.password && <div className="invalid-feedback">{error.password}</div>}
               </div>
 
               <div className="mb-3 text-center">
-                <div className="d-flex justify-content-center align-items-center">
+                <div className="d-flex justify-content-center align-items-center captcha-section">
                   <span className="captcha-box">{captchaText}</span>
-                  <i
-                    className="fa fa-sync ms-2"
-                    title="Refresh Captcha"
-                    style={{ cursor: 'pointer' }}
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-light ms-3"
                     onClick={refreshCaptcha}
-                  ></i>
+                    title="Refresh Captcha"
+                    disabled={isLoading}
+                  >
+                    <i className="fa fa-sync"></i>
+                  </button>
                 </div>
                 <input
                   type="text"
-                  className="form-control mt-2"
+                  className={`form-control mt-2 ${captchaError ? 'is-invalid' : ''}`}
                   placeholder="Enter captcha"
                   value={userInputCaptcha}
                   onChange={(e) => setUserInputCaptcha(e.target.value)}
                   disabled={isLoading}
                 />
-                {captchaError && <small className="text-danger">{captchaError}</small>}
+                {captchaError && <div className="invalid-feedback">{captchaError}</div>}
               </div>
 
-              <div className="text-center">
-                <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>
+              <div className="d-grid">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isLoading}
+                >
                   {isLoading ? 'Logging in...' : 'Login'}
                 </button>
               </div>
             </form>
-          </div>
 
-          {isLoading && (
-            <div className="d-flex justify-content-center mt-3">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Logging in...</span>
-              </div>
+            <div className="text-center mt-3">
+              <button
+                className="btn btn-link"
+                onClick={() => setShowForm(false)}
+                disabled={isLoading}
+              >
+                ← Back to Google Login
+              </button>
             </div>
-          )}
+          </div>
+        )}
 
-          <p className="text-center text-muted mt-3">
-            Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
-          </p>
-
-        
-        </div>
+        <p className="text-center text-muted mt-4">
+          Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
+        </p>
       </div>
     </div>
   );
