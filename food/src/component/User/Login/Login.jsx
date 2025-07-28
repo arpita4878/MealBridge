@@ -16,7 +16,6 @@ function Login() {
   const [userInputCaptcha, setUserInputCaptcha] = useState('');
   const [captchaError, setCaptchaError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [darkMode, setDarkMode] = useState(false); // optional theme toggle
 
   const validate = () => {
     const newError = {};
@@ -115,7 +114,7 @@ function Login() {
   };
 
   return (
-    <div className={`login-wrapper ${darkMode ? 'dark-mode' : ''}`}>
+    <div >
       <div className="login-container">
         <div className="login-box shadow bg-white rounded p-4">
           <div className="text-center mb-3">
@@ -135,7 +134,7 @@ function Login() {
                   className="btn btn-outline-secondary"
                   onClick={() => setShowForm(true)}
                 >
-                  Login with Password
+                  Login with Email
                 </button>
               </div>
             </>
@@ -208,16 +207,11 @@ function Login() {
             Don’t have an account? <Link to="/register" className="fw-bold">Register</Link>
           </p>
 
-          {/* Optional: Dark mode toggle */}
-          <div className="text-center mt-2">
-            <button className="btn btn-sm btn-outline-dark" onClick={() => setDarkMode(!darkMode)}>
-              Toggle {darkMode ? 'Light' : 'Dark'} Mode
-            </button>
-          </div>
+        
         </div>
       </div>
     </div>
   );
-} 
+}
 
-export default Login; 
+export default Login;
