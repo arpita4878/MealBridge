@@ -23,16 +23,6 @@ const PartnerSchema = new mongoose.Schema({
     required: [true, "message is required"],
     trim: true
   },
-  location: {
-    type: String,
-    required: [true, "Pickup location is required"],
-    trim: true
-  },
-  contact: {
-    type: String,
-    required: [true, "Contact number is required"],
-    trim: true,
-  },
  
   info: {
     type: String,

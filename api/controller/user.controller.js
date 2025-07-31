@@ -27,7 +27,7 @@ export const register=async(req,res)=>{
     }
 }
 
-
+//google login
 const CLIENT_ID = '906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com';
 const client = new OAuth2Client(CLIENT_ID);
 
@@ -98,6 +98,7 @@ export const googleLogin = async (req, res) => {
 }
 };
 
+//check email
 export const checkEmail = async (req, res) => {
   try {
     const { email } = req.query;
@@ -214,6 +215,23 @@ export const checkEmail = async (req, res) => {
 
 
 
+// POST /api/chatbot
+export const bot  = async (req, res) => {
+  const { message } = req.body;
+
+  // Simple logic / OpenAI call
+  if (message.includes("donate")) {
+    return res.json({ reply: "You can donate food by going to the 'Add Surplus' section." });
+  }
+
+  // Optionally use OpenAI's GPT
+  const gptReply = await openai.createChatCompletion({
+    model: 'gpt-3.5-turbo',
+    messages: [{ role: "user", content: message }]
+  });
+
+  res.json({ reply: gptReply.data.choices[0].message.content });
+};
 
 
 
