@@ -8,6 +8,7 @@ const About = lazy(() => import('./component/Visitors/About/About'));
 const Service = lazy(() => import('./component/Visitors/service/Service'));
 const Contact = lazy(() => import('./component/Visitors/Contact/Conatct'));
 
+const ChatBot = lazy(() => import('./component/User/Bot/Bot'));
 const BecomePartner = lazy(() => import('./component/User/Partner/Partner'));
 const GamificationDashboard = lazy(() => import('./component/User/Badges/GamificationDashboard'));
 const Volunteer = lazy(() => import('./component/User/Volunteer/Volunteer'));
@@ -65,6 +66,7 @@ function App() {
     <Route path='/volunteer' element={<Volunteer />} />
     <Route path="/dashboard" element={<GamificationDashboard />} />
     <Route path="/partners" element={<BecomePartner />} />
+    <Route path="/chatbot" element={<ChatBot />} />
 
     <Route path='/admin' element={<AdminHome />} />
     <Route path='/manage-users' element={<MUser />} />
