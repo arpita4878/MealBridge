@@ -66,7 +66,6 @@ function App() {
     <Route path='/volunteer' element={<Volunteer />} />
     <Route path="/dashboard" element={<GamificationDashboard />} />
     <Route path="/partners" element={<BecomePartner />} />
-    <Route path="/chatbot" element={<ChatBot />} />
 
     <Route path='/admin' element={<AdminHome />} />
     <Route path='/manage-users' element={<MUser />} />
@@ -76,9 +75,8 @@ function App() {
 </Suspense>
 
       {/*  Back to Top*/}
-<Link to="/" className="btn btn-md-square btn-primary rounded-circle back-to-top">
-  <i className="fa fa-arrow-up"></i>
-</Link>
+<ChatBot />
+
 
 
     </>
