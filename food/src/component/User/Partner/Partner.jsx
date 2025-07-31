@@ -3,8 +3,11 @@ import './BecomePartner.css';
 import swal from 'sweetalert2'
 import  {__partnerapiurl} from '../../../Api_Url'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+
 
 function BecomePartner() {
+    const navigate = useNavigate()
   const [formData, setFormData] = useState({
     organization: '',
     contactName: '',
@@ -52,6 +55,17 @@ function BecomePartner() {
         <div className="partner-success">
           <h3>🎉 Thank you for partnering!</h3>
           <p>We'll reach out to you soon with more information.</p>
+
+            <p className="mt-4 text-muted">
+                  Want to go back?{' '}
+                  <span
+                    className="fw-bold text-decoration-none text-primary"
+                    role="button"
+                    onClick={() => navigate(-1)}
+                  >
+                     return
+                  </span>
+                </p>
         </div>
       ) : (
         <form className="partner-form" onSubmit={handleSubmit}>

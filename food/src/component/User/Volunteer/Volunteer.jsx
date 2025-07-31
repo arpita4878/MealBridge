@@ -3,8 +3,10 @@ import './Volunteer.css';
 import swal from 'sweetalert2';
 import axios from 'axios';
 import { __volunteerapiurl } from '../../../Api_Url';
+import { useNavigate } from 'react-router-dom';
 
 function Volunteer() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
@@ -43,7 +45,19 @@ function Volunteer() {
         <div className="volunteer-success">
           <h3>🎉 Thank you for volunteering!</h3>
           <p>We’ll be in touch with more details shortly.</p>
+
+           <p className="mt-4 text-muted">
+                  Want to go back?{' '}
+                  <span
+                    className="fw-bold text-decoration-none text-primary"
+                    role="button"
+                    onClick={() => navigate(-1)}
+                  >
+                     return
+                  </span>
+                </p>
         </div>
+        
       ) : (
         <form className="volunteer-form" onSubmit={handleSubmit}>
           <label>
