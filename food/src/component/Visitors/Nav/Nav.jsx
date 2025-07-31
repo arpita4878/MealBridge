@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import './Nav.css'
 import { useEffect, useState } from 'react';
+import Auth from '../../Auth/Auth';
 
 
 function Nav() {
@@ -227,7 +228,7 @@ function Nav() {
 
     return (
         <>
-
+            {<Auth/>}
             {Nav}
 
         </>
