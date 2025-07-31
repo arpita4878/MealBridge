@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './BecomePartner.css';
 import swal from 'sweetalert2'
+import  {__partnerapiurl} from '../../../Api_Url'
+import axios from 'axios'
 
 function BecomePartner() {
   const [formData, setFormData] = useState({
@@ -15,38 +17,29 @@ function BecomePartner() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  try {
+    const response = await axios.post(__partnerapiurl + "add", formData);
 
-    try {
-      const response = await fetch(
-        'https://script.google.com/macros/s/AKfycby9oXcVOWqWoZ3CLa2-PuCXXdHwE0o7lmb7guhYlqX69SBTEraRAu8lZFz0tLYtZyj0ig/exec',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      if (response.ok) {
-        setSubmitted(true);
-        setFormData({
-          organization: '',
-          contactName: '',
-          email: '',
-          message: '',
-        });
-      } else {
-        swal.fire('Submission failed. Please try again later.');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      swal.fire('There was an error submitting the form. Please try again.');
+    if (response.status === 200 || response.status === 201) {
+      setSubmitted(true);
+      setFormData({
+        organization: '',
+        contactName: '',
+        email: '',
+        message: '',
+      });
+      swal.fire('Success!', 'Thank you for partnering with us!', 'success');
+    } else {
+      swal.fire('Submission failed. Please try again later.', '', 'error');
     }
-  };
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    swal.fire('There was an error submitting the form. Please try again.', '', 'error');
+  }
+};
 
   return (
     <section className="partner-form-section" aria-labelledby="partner-form-title">

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Volunteer.css';
 import swal from 'sweetalert2';
+import axios from 'axios';
+import { __volunteerapiurl } from '../../../Api_Url';
 
 function Volunteer() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -13,23 +15,11 @@ function Volunteer() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+ 
     try {
-      const form = new FormData();
-      form.append('name', formData.name);
-      form.append('email', formData.email);
-      form.append('message', formData.message);
+      const response = await axios.post(__volunteerapiurl + "add", formData);
 
-      const response = await fetch(
-        'https://script.google.com/macros/s/AKfycby9oXcVOWqWoZ3CLa2-PuCXXdHwE0o7lmb7guhYlqX69SBTEraRAu8lZFz0tLYtZyj0ig/exec',
-        {
-          method: 'POST',
-          mode: 'cors',
-          body: form
-        }
-      );
-
-      if (response.ok) {
+    if (response.status === 200 || response.status === 201) {
         setSubmitted(true);
         setFormData({ name: '', email: '', message: '' });
         swal.fire('🎉 Thank you!', 'Your form was submitted successfully.', 'success');
