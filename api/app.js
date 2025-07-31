@@ -11,6 +11,8 @@ const app = express();
 //to link router
 import UserRouter from './routes/user.router.js';
 import FoodRouter from './routes/donor.router.js';
+import VolunteerRouter from './routes/Volunteer.router.js'
+import PartnerRouter from './routes/partner.router.js'
 
 //configuration to fetch req.body content :  body-parser middleware
 app.use(bodyparser.json());
@@ -27,6 +29,8 @@ app.use(cors({
 //to link router use router level middleware
 app.use("/user", UserRouter);
 app.use("/food", FoodRouter);
+app.use("/volunteer",VolunteerRouter);
+app.use("/partner",PartnerRouter);
 
 // Use PORT from env or fallback
 const PORT = process.env.PORT || 3001;
