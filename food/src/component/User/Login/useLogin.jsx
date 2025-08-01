@@ -1,10 +1,10 @@
-// useLogin.js
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { __userapiurl } from "../../../Api_Url";
 import { useNavigate } from "react-router-dom";
 
-export default function useLogin() {
+ function useLogin() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -123,3 +123,4 @@ export default function useLogin() {
     refreshCaptcha,
   };
 }
+export default useLogin;
