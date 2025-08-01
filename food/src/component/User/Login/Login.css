@@ -120,3 +120,8 @@ button:disabled {
   max-height: 800px; /* Adjust depending on form height */
   opacity: 1;
 }
+.captcha-box {
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+}
