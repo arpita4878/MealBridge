@@ -29,6 +29,8 @@ const MUser = lazy(() => import('./component/Admin/ManageUSer/MUser'));
 const Donation = lazy(() => import('./component/Admin/ManageDonation/Donation'));
 const ViewClaim = lazy(() => import('./component/Admin/ViewClaim/ViewClaim'));
 const CPassword = lazy(() => import('./component/Admin/CPassword/CPassword'));
+const Chat = lazy(() => import('./component/User/Find/Chat'));
+
 
 const userImpactData = [
   { icon: '🍎', label: 'Kilograms of Food Saved', value: 45 },
@@ -71,6 +73,8 @@ function App() {
     <Route path='/manage-users' element={<MUser />} />
     <Route path='/manage-donations' element={<Donation />} />
     <Route path='/user-claims' element={<ViewClaim />} />
+    <Route path="/chat" element={<Chat />} />
+
   </Routes>
 </Suspense>
 

@@ -15,8 +15,9 @@ function Find() {
     axios
       .get(__foodapiurl + "fetch")
       .then((response) => {
+        // Sort by createdAt descending (latest on top)
         const sorted = response.data.sort(
-          (a, b) => new Date(a.expiry) - new Date(b.expiry)
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
         setDonations(sorted);
       })
@@ -25,7 +26,7 @@ function Find() {
       });
   };
 
-  const handleClaim = async (_id) => {
+  const handleClaim = async (_id, donorName) => {
     const claimedBy = localStorage.getItem("name");
     const claimedContact = localStorage.getItem("mobile");
 
@@ -39,7 +40,14 @@ function Find() {
     try {
       const response = await axios.patch(__foodapiurl + "claim", claimedDetail);
       if (response.data.status) {
-        swal.fire("Claimed successfully");
+        swal
+          .fire("Claimed successfully")
+          .then(() => {
+            // Redirect to chat page
+            window.location.href = `/chat?user1=${encodeURIComponent(
+              donorName
+            )}&user2=${encodeURIComponent(claimedBy)}`;
+          });
         fetchfood();
       } else {
         swal.fire("Claim failed");
@@ -72,7 +80,6 @@ function Find() {
                   <div className="card-body position-relative">
                     <h5 className="card-title text-primary d-flex justify-content-between align-items-center">
                       {donation.foodItem}
-                      {/* Three-dot menu button */}
                       <button
                         onClick={() => toggleExpand(donation._id)}
                         aria-label="Toggle details"
@@ -94,7 +101,14 @@ function Find() {
                       <strong>Quantity:</strong> {donation.quantity}
                     </p>
                     <p className="card-text mb-1">
-                      <strong>Expiry:</strong> {new Date(donation.expiry).toLocaleString()}
+                      <strong>Expiry:</strong>{" "}
+                      {new Date(donation.expiry).toLocaleString()}
+                    </p>
+                    <p className="card-text mb-1">
+                      <strong>Added on:</strong>{" "}
+                      {donation.createdAt
+                        ? new Date(donation.createdAt).toLocaleString()
+                        : "N/A"}
                     </p>
 
                     {isExpanded && (
@@ -109,7 +123,8 @@ function Find() {
                           <strong>Contact:</strong> {donation.contact}
                         </p>
                         <p>
-                          <strong>Donor Name:</strong> {donation.donorName || "N/A"}
+                          <strong>Donor Name:</strong>{" "}
+                          {donation.donorName || "N/A"}
                         </p>
                         <p>
                           <strong>Status:</strong>{" "}
@@ -121,7 +136,8 @@ function Find() {
                         </p>
                         {donation.status === 1 && (
                           <p>
-                            <strong>Claimed Contact:</strong> {donation.claimedContact || "N/A"}
+                            <strong>Claimed Contact:</strong>{" "}
+                            {donation.claimedContact || "N/A"}
                           </p>
                         )}
                       </div>
@@ -137,13 +153,16 @@ function Find() {
                           Claimed by {donation.claimedBy || "someone"}
                         </button>
                       ) : localStorage.getItem("name") === donation.donorName ? (
-                        <button className="btn btn-outline-secondary btn-sm" disabled>
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          disabled
+                        >
                           You are the donor
                         </button>
                       ) : (
                         <button
                           className="btn btn-success btn-sm"
-                          onClick={() => handleClaim(donation._id)}
+                          onClick={() => handleClaim(donation._id, donation.donorName)}
                         >
                           Claim This
                         </button>
