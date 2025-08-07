@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Nav from './component/Visitors/Nav/Nav';
+import Chat from './component/User/Find/Chat';
 
 const Home = lazy(() => import('./component/Visitors/Home/Home'));
 const About = lazy(() => import('./component/Visitors/About/About'));
@@ -29,7 +30,6 @@ const MUser = lazy(() => import('./component/Admin/ManageUSer/MUser'));
 const Donation = lazy(() => import('./component/Admin/ManageDonation/Donation'));
 const ViewClaim = lazy(() => import('./component/Admin/ViewClaim/ViewClaim'));
 const CPassword = lazy(() => import('./component/Admin/CPassword/CPassword'));
-const Chat = lazy(() => import('./component/User/Find/Chat'));
 
 
 const userImpactData = [
