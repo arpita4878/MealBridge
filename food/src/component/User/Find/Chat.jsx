@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { __chatbotapiurl } from "../../../Api_Url"; // chatbot api url
+import { __chatbotapiurl } from "../../../Api_Url";
+import "./Chat.css"; // custom styling for animations + mobile
 
 function Chat() {
   const query = new URLSearchParams(useLocation().search);
@@ -10,6 +11,7 @@ function Chat() {
 
   const currentUser = localStorage.getItem("name") || "You";
   const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
   const suggestions = [
@@ -23,7 +25,7 @@ function Chat() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const sendMessage = async (messageText) => {
     if (!messageText.trim()) return;
@@ -32,26 +34,36 @@ function Chat() {
       sender: currentUser,
       content: messageText,
       timestamp: new Date().toLocaleTimeString(),
+      animated: true,
     };
 
     setMessages((prev) => [...prev, userMsg]);
+    setIsTyping(true); // show typing indicator
 
     try {
       const res = await axios.post(__chatbotapiurl, { message: messageText });
+
       const botReply = {
         sender: "FoodBot 🤖",
         content: res.data.reply,
         timestamp: new Date().toLocaleTimeString(),
+        animated: true,
       };
-      setMessages((prev) => [...prev, botReply]);
+
+      setTimeout(() => {
+        setMessages((prev) => [...prev, botReply]);
+        setIsTyping(false);
+      }, 700); // simulate delay
     } catch (err) {
       console.error("Bot error:", err);
       const errorReply = {
         sender: "FoodBot 🤖",
         content: "Sorry, something went wrong. Please try again later.",
         timestamp: new Date().toLocaleTimeString(),
+        animated: true,
       };
       setMessages((prev) => [...prev, errorReply]);
+      setIsTyping(false);
     }
   };
 
@@ -60,79 +72,66 @@ function Chat() {
   };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: "600px" }}>
-      <h4 className="mb-4 text-center">
+    <div className="chat-container container mt-4">
+      <h5 className="mb-3 text-center">
         Chat between <strong>{user1}</strong> and <strong>{user2}</strong>
-      </h4>
+      </h5>
 
-      {/* Suggested questions buttons */}
-      <div style={{ marginBottom: "10px" }}>
-        <div className="d-flex flex-wrap gap-2 justify-content-center">
-          {suggestions.map((suggestion, i) => (
-            <button
-              key={i}
-              className="btn btn-outline-primary btn-sm"
-              onClick={() => sendMessage(suggestion)}
-            >
-              {suggestion}
-            </button>
-          ))}
-        </div>
+      {/* Suggestions */}
+      <div className="d-flex flex-wrap gap-2 justify-content-center mb-3">
+        {suggestions.map((suggestion, i) => (
+          <button
+            key={i}
+            className="btn btn-outline-primary btn-sm"
+            onClick={() => sendMessage(suggestion)}
+          >
+            {suggestion}
+          </button>
+        ))}
       </div>
 
-      {/* Chat message window */}
-      <div
-        style={{
-          border: "1px solid #ccc",
-          borderRadius: "10px",
-          padding: "15px",
-          height: "400px",
-          overflowY: "auto",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
-        {messages.length === 0 && <p className="text-muted">Select a question to start chatting...</p>}
+      {/* Chat window */}
+      <div className="chat-box">
+        {messages.length === 0 && (
+          <p className="text-muted">Select a question to start chatting...</p>
+        )}
         {messages.map((msg, index) => (
           <div
             key={index}
+            className={`chat-bubble ${msg.animated ? "fade-in" : ""}`}
             style={{
-              display: "flex",
               justifyContent:
                 msg.sender === currentUser ? "flex-end" : "flex-start",
-              marginBottom: "10px",
             }}
           >
             <div
-              style={{
-                backgroundColor:
-                  msg.sender === currentUser
-                    ? "#007bff"
-                    : msg.sender === "FoodBot 🤖"
-                    ? "#28a745"
-                    : "#e4e6eb",
-                color:
-                  msg.sender === currentUser || msg.sender === "FoodBot 🤖"
-                    ? "#fff"
-                    : "#000",
-                padding: "10px 15px",
-                borderRadius: "20px",
-                maxWidth: "70%",
-              }}
+              className={`bubble-content ${
+                msg.sender === currentUser
+                  ? "user-bubble"
+                  : msg.sender === "FoodBot 🤖"
+                  ? "bot-bubble"
+                  : "default-bubble"
+              }`}
             >
               <strong>{msg.sender}</strong>
               <div>{msg.content}</div>
-              <div
-                style={{
-                  fontSize: "0.75rem",
-                  textAlign: "right",
-                  marginTop: "4px",
-                }}
-              >
-                {msg.timestamp}
-              </div>
+              <div className="timestamp">{msg.timestamp}</div>
             </div>
           </div>
         ))}
+
+        {isTyping && (
+          <div className="chat-bubble fade-in">
+            <div className="bubble-content bot-bubble">
+              <strong>FoodBot 🤖</strong>
+              <div className="typing-indicator">
+                <span>.</span>
+                <span>.</span>
+                <span>.</span>
+              </div>
+            </div>
+          </div>
+        )}
         <div ref={chatEndRef} />
       </div>
     </div>
