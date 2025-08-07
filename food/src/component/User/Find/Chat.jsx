@@ -73,11 +73,16 @@ function Chat() {
 
   return (
     <div className="chat-container container mt-4">
-      <h5 className="mb-3 text-center">
-        Chat between <strong>{user1}</strong> and <strong>{user2}</strong>
-      </h5>
+    <h5 className="mb-3 text-center">
+  {user1 && user2 ? (
+    <>Chat between <strong>{user1}</strong> and <strong>{user2}</strong></>
+  ) : (
+    <>FoodBot Chat</>
+  )}
+</h5>
 
-      {/* Suggestions */}
+
+      {/* Suggestions only */}
       <div className="d-flex flex-wrap gap-2 justify-content-center mb-3">
         {suggestions.map((suggestion, i) => (
           <button
@@ -132,6 +137,7 @@ function Chat() {
             </div>
           </div>
         )}
+
         <div ref={chatEndRef} />
       </div>
     </div>

@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { __chatbotapiurl } from "../../../Api_Url";
-import "./Chat.css"; // custom styling for animations + mobile
+import "./Chat.css"; // Make sure to handle styles accordingly
 
 function Chat() {
   const query = new URLSearchParams(useLocation().search);
-  const user1 = query.get("user1");
-  const user2 = query.get("user2");
+  const user1 = query.get("user1") || "User A";
+  const user2 = query.get("user2") || "User B";
 
   const currentUser = localStorage.getItem("name") || "You";
   const [messages, setMessages] = useState([]);
@@ -23,8 +23,18 @@ function Chat() {
     "Hello",
   ];
 
+  // Load saved messages from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("chat_messages");
+    if (saved) {
+      setMessages(JSON.parse(saved));
+    }
+  }, []);
+
+  // Scroll and persist messages
   useEffect(() => {
     scrollToBottom();
+    localStorage.setItem("chat_messages", JSON.stringify(messages));
   }, [messages, isTyping]);
 
   const sendMessage = async (messageText) => {
@@ -33,7 +43,7 @@ function Chat() {
     const userMsg = {
       sender: currentUser,
       content: messageText,
-      timestamp: new Date().toLocaleTimeString(),
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       animated: true,
     };
 
@@ -45,8 +55,8 @@ function Chat() {
 
       const botReply = {
         sender: "FoodBot 🤖",
-        content: res.data.reply,
-        timestamp: new Date().toLocaleTimeString(),
+        content: res.data.reply?.trim() || "Sorry, I didn’t understand that.",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         animated: true,
       };
 
@@ -59,7 +69,7 @@ function Chat() {
       const errorReply = {
         sender: "FoodBot 🤖",
         content: "Sorry, something went wrong. Please try again later.",
-        timestamp: new Date().toLocaleTimeString(),
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         animated: true,
       };
       setMessages((prev) => [...prev, errorReply]);
@@ -132,6 +142,7 @@ function Chat() {
             </div>
           </div>
         )}
+
         <div ref={chatEndRef} />
       </div>
     </div>
