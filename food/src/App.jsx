@@ -2,7 +2,6 @@ import { lazy, Suspense } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Nav from './component/Visitors/Nav/Nav';
-import Chat from './component/User/Find/Chat';
 
 const Home = lazy(() => import('./component/Visitors/Home/Home'));
 const About = lazy(() => import('./component/Visitors/About/About'));
@@ -73,7 +72,6 @@ function App() {
     <Route path='/manage-users' element={<MUser />} />
     <Route path='/manage-donations' element={<Donation />} />
     <Route path='/user-claims' element={<ViewClaim />} />
-    <Route path="/chat" element={<Chat />} />
 
   </Routes>
 </Suspense>
