@@ -31,6 +31,7 @@ app.use("/user", UserRouter);
 app.use("/food", FoodRouter);
 app.use("/volunteer",VolunteerRouter);
 app.use("/partner",PartnerRouter);
+app.use('/api', chatBotRouter);
 
 // Use PORT from env or fallback
 const PORT = process.env.PORT || 3001;

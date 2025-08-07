@@ -1,0 +1,16 @@
+project-root/
+│
+├── controller/
+│   ├──auth.controller.js
+│   ├── user.controller.js
+│   ├── chatBot.controller.js
+│
+├── routes/
+│   ├── user.router.js
+│   ├── chatBot.routes.js
+│
+├── model/
+│   └── user.model.js
+│
+├── .env
+├── app.js
