@@ -14,13 +14,13 @@ function Header() {
               </small>
               <h2 class="display-1 mb-4 animated bounceInDown">
                 Bridge the gap between food waste and hunger with{" "}
-                <span class="text-primary">Meal Bridge.</span>
+                <span class="text-primary">Meal Bridge...</span>
               </h2>
               <Link
                 to="/register"
                 className="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 me-4 animated bounceInLeft text-white text-decoration-none"
               >
-                Register
+                Donate food
               </Link>
               {/*   <a  class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 animated bounceInLeft">Know More</a> */}
             </div>
