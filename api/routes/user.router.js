@@ -15,9 +15,6 @@ router.get("/fetch",UserController.fetch)
 
 router.delete("/deleteUser",UserController.deleteUser)
 
-router.post('/api/chatbot',UserController.bot)
-
-
 export default router;
 
 
