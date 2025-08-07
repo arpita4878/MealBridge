@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { __chatbotapiurl } from "../../../Api_Url";
-import "./Chat.css"; // Make sure to handle styles accordingly
+import "./ChatBot.css"; 
 
 function Chat() {
   const query = new URLSearchParams(useLocation().search);
