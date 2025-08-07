@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { __chatbotapiurl } from "./apiUrls"; // import your API url constant
+import { __chatbotapiurl } from "../../../Api_Url"; // chatbot api url
 
 function Chat() {
   const query = new URLSearchParams(useLocation().search);
-  const user1 = query.get("user1"); // donor
-  const user2 = query.get("user2"); // claimer
+  const user1 = query.get("user1");
+  const user2 = query.get("user2");
 
   const currentUser = localStorage.getItem("name") || "You";
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
   const chatEndRef = useRef(null);
 
-  // Suggested questions for quick chat:
   const suggestions = [
     "How do I donate food?",
     "How do I claim food?",
@@ -37,7 +35,6 @@ function Chat() {
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    setNewMessage("");
 
     try {
       const res = await axios.post(__chatbotapiurl, { message: messageText });
@@ -58,17 +55,8 @@ function Chat() {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") sendMessage(newMessage);
-  };
-
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // When a suggestion is clicked, send that message immediately
-  const onSuggestionClick = (suggestion) => {
-    sendMessage(suggestion);
   };
 
   return (
@@ -77,14 +65,14 @@ function Chat() {
         Chat between <strong>{user1}</strong> and <strong>{user2}</strong>
       </h4>
 
+      {/* Suggested questions buttons */}
       <div style={{ marginBottom: "10px" }}>
-        {/* Suggested questions */}
         <div className="d-flex flex-wrap gap-2 justify-content-center">
           {suggestions.map((suggestion, i) => (
             <button
               key={i}
               className="btn btn-outline-primary btn-sm"
-              onClick={() => onSuggestionClick(suggestion)}
+              onClick={() => sendMessage(suggestion)}
             >
               {suggestion}
             </button>
@@ -92,6 +80,7 @@ function Chat() {
         </div>
       </div>
 
+      {/* Chat message window */}
       <div
         style={{
           border: "1px solid #ccc",
@@ -102,7 +91,7 @@ function Chat() {
           backgroundColor: "#f9f9f9",
         }}
       >
-        {messages.length === 0 && <p className="text-muted">Start chatting...</p>}
+        {messages.length === 0 && <p className="text-muted">Select a question to start chatting...</p>}
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -145,21 +134,6 @@ function Chat() {
           </div>
         ))}
         <div ref={chatEndRef} />
-      </div>
-
-      {/* Input area */}
-      <div className="input-group mt-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Type your message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
-        />
-        <button className="btn btn-primary" onClick={() => sendMessage(newMessage)}>
-          Send
-        </button>
       </div>
     </div>
   );
