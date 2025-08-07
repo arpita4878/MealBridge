@@ -13,6 +13,7 @@ import UserRouter from './routes/user.router.js';
 import FoodRouter from './routes/donor.router.js';
 import VolunteerRouter from './routes/Volunteer.router.js'
 import PartnerRouter from './routes/partner.router.js'
+import chatBotRouter from './routes/chatBot.router.js'
 
 //configuration to fetch req.body content :  body-parser middleware
 app.use(bodyparser.json());
