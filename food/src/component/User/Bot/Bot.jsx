@@ -1,70 +1,141 @@
-import React, { useState } from 'react';
-import './ChatBot.css';
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { __chatbotapiurl } from "../../../Api_Url";
+import "./Chat.css"; // custom styling for animations + mobile
 
-function ChatBot() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { from: 'bot', text: 'Hi! How can I help you today?' }
-  ]);
-  const [userInput, setUserInput] = useState('');
+function Chat() {
+  const query = new URLSearchParams(useLocation().search);
+  const user1 = query.get("user1");
+  const user2 = query.get("user2");
 
-  const toggleChat = () => setIsOpen(!isOpen);
+  const currentUser = localStorage.getItem("name") || "You";
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const chatEndRef = useRef(null);
 
-  const sendMessage = async () => {
-    if (!userInput.trim()) return;
+  const suggestions = [
+    "How do I donate food?",
+    "How do I claim food?",
+    "Where is the service available?",
+    "How can I volunteer?",
+    "How to become a partner?",
+    "Hello",
+  ];
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping]);
+
+  const sendMessage = async (messageText) => {
+    if (!messageText.trim()) return;
+
+    const userMsg = {
+      sender: currentUser,
+      content: messageText,
+      timestamp: new Date().toLocaleTimeString(),
+      animated: true,
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setIsTyping(true); // show typing indicator
 
     try {
-      const response = await fetch('/api/chatbot', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userInput }),
-      });
+      const res = await axios.post(__chatbotapiurl, { message: messageText });
 
-      const data = await response.json();
+      const botReply = {
+        sender: "FoodBot 🤖",
+        content: res.data.reply,
+        timestamp: new Date().toLocaleTimeString(),
+        animated: true,
+      };
 
-      setMessages((prev) => [
-        ...prev,
-        { from: 'user', text: userInput },
-        { from: 'bot', text: data.reply || 'Sorry, I didn’t understand that.' },
-      ]);
+      setTimeout(() => {
+        setMessages((prev) => [...prev, botReply]);
+        setIsTyping(false);
+      }, 700); // simulate delay
     } catch (err) {
-      console.error('Chat error:', err);
-      setMessages((prev) => [
-        ...prev,
-        { from: 'user', text: userInput },
-        { from: 'bot', text: 'Server error. Try again later.' },
-      ]);
+      console.error("Bot error:", err);
+      const errorReply = {
+        sender: "FoodBot 🤖",
+        content: "Sorry, something went wrong. Please try again later.",
+        timestamp: new Date().toLocaleTimeString(),
+        animated: true,
+      };
+      setMessages((prev) => [...prev, errorReply]);
+      setIsTyping(false);
     }
+  };
 
-    setUserInput('');
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <div className="chatbot-container">
-      <button onClick={toggleChat} className="chatbot-toggle">
-        💬
-      </button>
+    <div className="chat-container container mt-4">
+      <h5 className="mb-3 text-center">
+        Chat between <strong>{user1}</strong> and <strong>{user2}</strong>
+      </h5>
 
-      {isOpen && (
-        <div className="chatbot-box">
-          <div className="chatbot-messages">
-            {messages.map((msg, i) => (
-              <div key={i} className={`chat-msg ${msg.from}`}>
-                {msg.text}
-              </div>
-            ))}
+      {/* Suggestions */}
+      <div className="d-flex flex-wrap gap-2 justify-content-center mb-3">
+        {suggestions.map((suggestion, i) => (
+          <button
+            key={i}
+            className="btn btn-outline-primary btn-sm"
+            onClick={() => sendMessage(suggestion)}
+          >
+            {suggestion}
+          </button>
+        ))}
+      </div>
+
+      {/* Chat window */}
+      <div className="chat-box">
+        {messages.length === 0 && (
+          <p className="text-muted">Select a question to start chatting...</p>
+        )}
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`chat-bubble ${msg.animated ? "fade-in" : ""}`}
+            style={{
+              justifyContent:
+                msg.sender === currentUser ? "flex-end" : "flex-start",
+            }}
+          >
+            <div
+              className={`bubble-content ${
+                msg.sender === currentUser
+                  ? "user-bubble"
+                  : msg.sender === "FoodBot 🤖"
+                  ? "bot-bubble"
+                  : "default-bubble"
+              }`}
+            >
+              <strong>{msg.sender}</strong>
+              <div>{msg.content}</div>
+              <div className="timestamp">{msg.timestamp}</div>
+            </div>
           </div>
-          <input
-            type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-            placeholder="Ask me anything..."
-          />
-        </div>
-      )}
+        ))}
+
+        {isTyping && (
+          <div className="chat-bubble fade-in">
+            <div className="bubble-content bot-bubble">
+              <strong>FoodBot 🤖</strong>
+              <div className="typing-indicator">
+                <span>.</span>
+                <span>.</span>
+                <span>.</span>
+              </div>
+            </div>
+          </div>
+        )}
+        <div ref={chatEndRef} />
+      </div>
     </div>
   );
 }
 
-export default ChatBot;
+export default Chat;
