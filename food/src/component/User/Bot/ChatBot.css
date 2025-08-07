@@ -60,3 +60,76 @@
   padding: 10px;
   outline: none;
 }
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.chatbot-toggle {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.chatbot-box {
+  width: 320px;
+  max-height: 500px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.chat-bubble {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.bubble-content {
+  max-width: 80%;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+}
+
+.user-bubble {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+}
+
+.bot-bubble {
+  background-color: #e8e8e8;
+}
+
+.typing-indicator span {
+  animation: blink 1.4s infinite;
+  font-size: 20px;
+  margin: 0 1px;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
