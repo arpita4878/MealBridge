@@ -13,7 +13,8 @@ dist-ssr/
 # Local env files
 *.local
 *.env
-url.env
+/url.env
+MealBridge/api/*.env
 
 # Editor config
 .vscode/*
