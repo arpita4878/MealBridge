@@ -8,7 +8,7 @@ import emailVerification from './email.controller.js';
 
 // Constants
 const CLIENT_ID = '906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com';
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_here';
+const JWT_SECRET = process.env.JWT_SECRET || 'jwt_secret_key_here';
 const client = new OAuth2Client(CLIENT_ID);
 
 // Register
