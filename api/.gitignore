@@ -1,27 +1,24 @@
-/CaterServ-1.0.0
-/food-waste.txt
-
 # Logs
-logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependency directories
+node_modules/
+dist/
+dist-ssr/
 
-# Env files
+# Local env files
+*.local
+*.env
 url.env
 
-# Editor directories and files
+# Editor config
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
