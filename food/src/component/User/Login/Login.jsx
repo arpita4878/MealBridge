@@ -49,7 +49,7 @@ function Login() {
     // Initialize Google Sign-In
     window.google?.accounts.id.initialize({
       client_id:
-        "906310881176-79sroguj45kjautpb9go7bhmn7gsl784.apps.googleusercontent.com",
+        "906310881176-.apps.googleusercontent.com",
       callback: handleGoogleResponse,
     });
 

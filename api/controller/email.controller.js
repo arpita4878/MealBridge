@@ -8,8 +8,8 @@ try{
     var transporter=nodemailer.createTransport({
     service:'gmail',
     auth:{
-        user:'sethaku192@gmail.com',
-        pass:'wiaukfpbwdtqgfbe'
+        user:'@gmail.com',
+        pass:''
     }
 })
 var mailOption={
